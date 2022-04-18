@@ -6,6 +6,7 @@ const allclearButton = document.querySelector('[data-allClear]');
 const expressionText = document.querySelector(`[data-expression]`);
 const currentText = document.querySelector(`[data-current]`);
 
+let foundAnswer = false;
 
 class Calculator {
     constructor(expressionText, currentText){
@@ -21,11 +22,41 @@ class Calculator {
     }
 
     compute(){
-        
+         let computation;
+         const exp = parseFloat(this.expression);
+         const curr = parseFloat(this.current);        
+         if(isNaN(exp) || isNaN(curr)) return;
+         switch (this.operation){
+            case '+':
+                computation = exp + curr;
+                break;
+            case '-':
+                computation = exp - curr;
+                break;
+            case '*':
+                computation = exp * curr;
+                break;
+            case '/':
+                if(curr===0){
+                    computation = 'undefined';
+                }
+                else{
+                    computation = exp / curr;
+                }
+         }
+         this.current = computation.toString();
+         this.expression = '';
     }
+
+
     appendNumber(number){
         if(number === '.' && this.current.includes('.')) return;
+        if(foundAnswer == true){
+            this.current = '';
+            foundAnswer = false;
+        }
         this.current = this.current.toString() + number.toString();
+        
     }
 
     chooseOperation(operation){
@@ -33,13 +64,15 @@ class Calculator {
         else{
             this.compute();
         }
+        
         this.operation = operation;
         this.expression = this.current + this.operation.toString();
         this.current = ''
+        
     }
 
     delete(){
-
+        this.current = this.current.toString().slice(0,-1);  
     }
 
     updateDisplay(){
@@ -49,7 +82,10 @@ class Calculator {
         }
         this.currentText.innerText = this.current;
         this.expressionText.innerText = this.expression;
+        
     }
+
+    
 
 }
 
@@ -73,9 +109,16 @@ operationButtons.forEach(button => {
 allclearButton.addEventListener('click', () =>{
     calculator.clear();
     calculator.updateDisplay();
-})
+});
 
 equalsButton.addEventListener('click', () => {
     calculator.compute();
     calculator.updateDisplay();
-})
+    foundAnswer = true;
+});
+
+deletebutton.addEventListener('click', () => {
+    calculator.delete();
+    calculator.updateDisplay();
+});
+
