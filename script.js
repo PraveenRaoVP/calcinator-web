@@ -38,7 +38,7 @@ class Calculator {
                 break;
             case '/':
                 if(curr===0){
-                    computation = 'undefined';
+                    computation = 'Error';
                 }
                 else{
                     computation = exp / curr;
@@ -84,9 +84,6 @@ class Calculator {
         this.expressionText.innerText = this.expression;
         
     }
-
-    
-
 }
 
 const calculator = new Calculator(expressionText,currentText);
@@ -117,8 +114,11 @@ equalsButton.addEventListener('click', () => {
     foundAnswer = true;
 });
 
+
 deletebutton.addEventListener('click', () => {
     calculator.delete();
     calculator.updateDisplay();
 });
+
+
 
